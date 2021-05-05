@@ -22,36 +22,6 @@ bpkg install [-g] kirtfitzpatrick/chap
 
 # Usage
 ```
-Usage:
-  chap [-hV]
-Options:
-  -h|--help      Print this help dialogue and exit
-  -V|--version   Print the current version and exit
-Commands:
-
-  info_msg         MESSAGE
-  nominal_msg      MESSAGE
-  attention_msg    MESSAGE
-  warning_msg      MESSAGE
-  modification_msg MESSAGE
-
-  info_cmd         COMMAND [ MESSAGE ]
-  nominal_cmd      COMMAND [ MESSAGE ]
-  attention_cmd    COMMAND [ MESSAGE ]
-  warning_cmd      COMMAND [ MESSAGE ]
-  modification_cmd COMMAND [ MESSAGE ]
-  echo_cmd         COMMAND
-
-  display_link       FILE_LINK_OR_DIR_PATH
-  brief_echo         OUTPUT_STRING
-  brief_eval         COMMAND
-  verify_line_count  LABEL COMPARISON_OP VALUE COMMAND
-
-  begin_line_looping # PREV_IFS=$(chap begin_line_looping)
-  end_line_looping   # chap end_line_looping "${PREV_IFS}"
-
-  print_header       "$0 $*"
-  confirm_cmd        COMMAND [MESSAGE]
 ```
 
 # Demo
