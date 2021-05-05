@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=0.0.3
+VERSION=0.0.4
 
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -197,7 +197,7 @@ function chap_verify_line_count {
   CORRECT=$2
   CMD=$3
   LABEL=$4
-  ACTUAL=`eval ${CMD} | wc -l`
+  ACTUAL=`eval ${CMD} | wc -l | awk '{print $1}'`
 
   if eval "[[ ${ACTUAL} ${COMPARATOR} ${CORRECT} ]]"; then
     chap_nominal_msg "${ACTUAL} ${LABEL} found."
