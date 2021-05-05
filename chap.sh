@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=0.0.2
+VERSION=0.0.3
 
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -160,7 +160,6 @@ function chap_warning_cmd  {
   fi
 
   chap_brief_eval "${CMD}"
-  echo ""
 }
 
 function chap_modification_cmd  {
@@ -174,7 +173,6 @@ function chap_modification_cmd  {
   fi
 
   chap_brief_eval "${CMD}"
-  echo ""
 }
 
 # PREV_IFS=$(_begin_line_looping)
@@ -209,7 +207,6 @@ function chap_verify_line_count {
 
   chap_echo_cmd "${CMD}"
   chap_brief_eval "${CMD}"
-  echo ""
 }
 
 # CMD=$1 First arg is command to confirm before executing
@@ -219,8 +216,6 @@ function chap_verify_line_count {
 # CONFIRM_ALL=0 to force confirmation for next command
 function chap_confirm_cmd {
   CMD=$1
-
-  echo ""
 
   if [[ $# -eq 2 ]]; then
     chap_info_msg "${2}"
