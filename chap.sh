@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=0.0.4
+VERSION=1.0.0
 
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -11,39 +11,42 @@ GREY_BG='\033[47;30m'
 PURPLE='\033[0;35m'
 NC='\033[0m' # No Color
 
+
 usage () {
-    cat <<HELP_MSG
+  HELP_TEXT=$(cat <<HELP_MSG
 Usage:
   chap [-hV]
 Options:
   -h|--help      Print this help dialogue and exit
   -V|--version   Print the current version and exit
 Commands:
-  info_msg
-  nominal_msg
-  attention_msg
-  warning_msg
-  modification_msg
 
-  info_cmd
-  nominal_cmd
-  attention_cmd
-  warning_cmd
-  modification_cmd
+  ${LT_BLUE}info_msg${NC}         MESSAGE
+  ${GREEN}nominal_msg${NC}      MESSAGE
+  ${YELLOW}attention_msg${NC}    MESSAGE
+  ${RED}warning_msg${NC}      MESSAGE
+  ${PURPLE}modification_msg${NC} MESSAGE
 
-  echo_cmd
-  display_link
-  brief_echo
-  brief_eval
-  verify_line_count
+  ${LT_BLUE}info_cmd${NC}         COMMAND [ MESSAGE ]
+  ${GREEN}nominal_cmd${NC}      COMMAND [ MESSAGE ]
+  ${YELLOW}attention_cmd${NC}    COMMAND [ MESSAGE ]
+  ${RED}warning_cmd${NC}      COMMAND [ MESSAGE ]
+  ${PURPLE}modification_cmd${NC} COMMAND [ MESSAGE ]
+  ${DK_BLUE}echo_cmd${NC}         COMMAND
 
-  begin_line_looping
-  end_line_looping
+  display_link       FILE_LINK_OR_DIR_PATH
+  brief_echo         OUTPUT_STRING
+  brief_eval         COMMAND
+  verify_line_count  LABEL COMPARISON_OP VALUE COMMAND
 
-  confirm_cmd
-}
+  begin_line_looping # PREV_IFS=\$(chap begin_line_looping)
+  end_line_looping   # chap end_line_looping "\${PREV_IFS}"
 
+  print_header       "\$0 \$*"
+  confirm_cmd        COMMAND [MESSAGE]
 HELP_MSG
+)
+  printf "${HELP_TEXT}\n\n"
 }
 
 # Helper Functions
@@ -94,7 +97,7 @@ function chap_brief_echo {
       LINE_COUNT=$((${LINE_COUNT} + 1))
       chap_display_link "${LINE}"
 
-      if [[ ${LINE_COUNT} -eq ${MAX_LINES} ]]; then
+      if [[ ${LINE_COUNT} -eq ${MAX_LINES} && ${ACTUAL_LINE_COUNT} -gt ${MAX_LINES} ]]; then
         printf " ... [ $((${ACTUAL_LINE_COUNT} - ${MAX_LINES})) more lines ]\n"
         break
       fi
@@ -175,28 +178,28 @@ function chap_modification_cmd  {
   chap_brief_eval "${CMD}"
 }
 
-# PREV_IFS=$(_begin_line_looping)
+# PREV_IFS=$(chap begin_line_looping)
 function chap_begin_line_looping {
   SAVEIFS=${IFS}
   IFS=$(echo -en "\n\b")
   echo "${SAVEIFS}"
 }
 
-# _end_line_looping "${PREV_IFS}"
+# chap end_line_looping "${PREV_IFS}"
 function chap_end_line_looping {
   IFS=${1}
 }
 
-# _verify_line_count "-gt" 0 "ls /some/thing | grep somepattern" "label for output messages"
-# arg 1: comparison operator to use
-# arg 2: number to compare line count to
-# arg 3: command string to eval and count lines of
-# arg 4: human readable name for the thing to include in output
+# _verify_line_count "name of things" "-gt" 0 "ls /some/thing | grep somepattern"
+# arg 1: human readable name for the thing to include in output
+# arg 2: comparison operator to use
+# arg 3: number to compare line count to
+# arg 4: command string to eval and count lines of
 function chap_verify_line_count {
-  COMPARATOR=$1
-  CORRECT=$2
-  CMD=$3
-  LABEL=$4
+  LABEL=$1
+  COMPARATOR=$2
+  CORRECT=$3
+  CMD=$4
   ACTUAL=`eval ${CMD} | wc -l | awk '{print $1}'`
 
   if eval "[[ ${ACTUAL} ${COMPARATOR} ${CORRECT} ]]"; then
@@ -241,7 +244,16 @@ function chap_confirm_cmd {
   esac
 }
 
+# chap print_header "$0 $*"
+function chap_print_header {
+  COMMAND_LINE=$1
 
+  printf "\n${GREY_BG}---------------------------------------------------------------------------------------------------------------------------------------------------------------${NC}\n"
+  printf "${LT_BLUE}Host:${NC}        `hostname`\n"
+  printf "${LT_BLUE}Command:${NC}     ${COMMAND_LINE}\n"
+  printf "${LT_BLUE}Working Dir:${NC} `pwd`\n"
+  echo ""
+}
 
 chap () {
   local opt="$1"
