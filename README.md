@@ -29,18 +29,18 @@ Options:
   -V|--version   Print the current version and exit
 Commands:
 
-  info_msg         MESSAGE
-  nominal_msg      MESSAGE
-  attention_msg    MESSAGE
-  warning_msg      MESSAGE
-  modification_msg MESSAGE
+  info_msg         MESSAGE
+  nominal_msg      MESSAGE
+  attention_msg    MESSAGE
+  warning_msg      MESSAGE
+  modification_msg MESSAGE
 
-  info_cmd         COMMAND [ MESSAGE ]
-  nominal_cmd      COMMAND [ MESSAGE ]
-  attention_cmd    COMMAND [ MESSAGE ]
-  warning_cmd      COMMAND [ MESSAGE ]
-  modification_cmd COMMAND [ MESSAGE ]
-  echo_cmd         COMMAND
+  info_cmd         COMMAND [ MESSAGE ]
+  nominal_cmd      COMMAND [ MESSAGE ]
+  attention_cmd    COMMAND [ MESSAGE ]
+  warning_cmd      COMMAND [ MESSAGE ]
+  modification_cmd COMMAND [ MESSAGE ]
+  echo_cmd         COMMAND
 
   display_link       FILE_LINK_OR_DIR_PATH
   brief_echo         OUTPUT_STRING
