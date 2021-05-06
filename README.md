@@ -14,7 +14,7 @@ Utility methods for writing scripts for humans.
 
 
 # Requirements
-- bash 3 or greater
+- bash 4 or greater
 
 # Install
 
