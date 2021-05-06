@@ -27,30 +27,34 @@ Usage:
 Options:
   -h|--help      Print this help dialogue and exit
   -V|--version   Print the current version and exit
-Commands:
 
-  info_msg         MESSAGE
-  nominal_msg      MESSAGE
-  attention_msg    MESSAGE
-  warning_msg      MESSAGE
-  modification_msg MESSAGE
+Logging:
+  info_msg           MESSAGE
+  nominal_msg        MESSAGE
+  attention_msg      MESSAGE
+  warning_msg        MESSAGE
+  modification_msg   MESSAGE
 
-  info_cmd         COMMAND [ MESSAGE ]
-  nominal_cmd      COMMAND [ MESSAGE ]
-  attention_cmd    COMMAND [ MESSAGE ]
-  warning_cmd      COMMAND [ MESSAGE ]
-  modification_cmd COMMAND [ MESSAGE ]
-  echo_cmd         COMMAND
+Evaluate command:
+  info_cmd           COMMAND [ MESSAGE ]
+  nominal_cmd        COMMAND [ MESSAGE ]
+  attention_cmd      COMMAND [ MESSAGE ]
+  warning_cmd        COMMAND [ MESSAGE ]
+  modification_cmd   COMMAND [ MESSAGE ]
 
+Internal:
+  echo_cmd           COMMAND
   display_link       FILE_LINK_OR_DIR_PATH
-  brief_echo         OUTPUT_STRING
+  brief_echo         OUTPUT_BUFFER
   brief_eval         COMMAND
-  verify_line_count  LABEL COMPARISON_OP VALUE COMMAND
 
+Iterate by line:
   begin_line_looping # PREV_IFS=$(chap begin_line_looping)
   end_line_looping   # chap end_line_looping "${PREV_IFS}"
 
+Special purpose:
   print_header       "$0 $*"
+  verify_line_count  LABEL COMPARISON_OP VALUE COMMAND
   confirm_cmd        COMMAND [MESSAGE]
 ```
 

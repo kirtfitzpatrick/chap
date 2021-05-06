@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=1.0.0
+VERSION=1.0.1
 
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -19,14 +19,15 @@ Usage:
 Options:
   -h|--help      Print this help dialogue and exit
   -V|--version   Print the current version and exit
-Commands:
 
+Logging:
   ${LT_BLUE}info_msg${NC}         MESSAGE
   ${GREEN}nominal_msg${NC}      MESSAGE
   ${YELLOW}attention_msg${NC}    MESSAGE
   ${RED}warning_msg${NC}      MESSAGE
   ${PURPLE}modification_msg${NC} MESSAGE
 
+Evaluate command:
   ${LT_BLUE}info_cmd${NC}         COMMAND [ MESSAGE ]
   ${GREEN}nominal_cmd${NC}      COMMAND [ MESSAGE ]
   ${YELLOW}attention_cmd${NC}    COMMAND [ MESSAGE ]
@@ -34,15 +35,18 @@ Commands:
   ${PURPLE}modification_cmd${NC} COMMAND [ MESSAGE ]
   ${DK_BLUE}echo_cmd${NC}         COMMAND
 
+Internal:
   display_link       FILE_LINK_OR_DIR_PATH
-  brief_echo         OUTPUT_STRING
+  brief_echo         OUTPUT_BUFFER
   brief_eval         COMMAND
-  verify_line_count  LABEL COMPARISON_OP VALUE COMMAND
 
+Iterate by line:
   begin_line_looping # PREV_IFS=\$(chap begin_line_looping)
   end_line_looping   # chap end_line_looping "\${PREV_IFS}"
 
+Special purpose:
   print_header       "\$0 \$*"
+  verify_line_count  LABEL COMPARISON_OP VALUE COMMAND
   confirm_cmd        COMMAND [MESSAGE]
 HELP_MSG
 )
