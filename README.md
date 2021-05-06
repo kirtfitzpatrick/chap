@@ -13,6 +13,9 @@ Utility methods for writing scripts for humans.
 - A basic header
 
 
+# Requirements
+- bash 3 or greater
+
 # Install
 
 Available as a [bpkg](http://www.bpkg.sh/)
