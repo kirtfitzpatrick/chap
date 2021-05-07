@@ -50,7 +50,7 @@ Special purpose:
   print_header       "\$0 \$*"
   verify_line_count  LABEL COMPARISON_OP VALUE COMMAND
   confirm_cmd        COMMAND [MESSAGE]
-  reset_confirm      # Reset auto-confirm to force confirmation again
+  confirm_reset      # Reset auto-confirm to force confirmation again
 HELP_MSG
 )
   printf "${HELP_TEXT}\n\n"
@@ -247,7 +247,7 @@ function chap_confirm_cmd {
   esac
 }
 
-function chap_reset_confirm {
+function chap_confirm_reset {
   CONFIRM_ALL=0
 }
 
