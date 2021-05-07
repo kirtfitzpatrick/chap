@@ -35,9 +35,9 @@ Evaluate command:
   ${YELLOW}attention_cmd${NC}      COMMAND [ MESSAGE ]
   ${RED}warning_cmd${NC}        COMMAND [ MESSAGE ]
   ${PURPLE}modification_cmd${NC}   COMMAND [ MESSAGE ]
-  ${DK_BLUE}echo_cmd${NC}           COMMAND
 
 Internal:
+  ${DK_BLUE}echo_cmd${NC}           COMMAND
   display_link       FILE_LINK_OR_DIR_PATH
   brief_echo         OUTPUT_BUFFER
   brief_eval         COMMAND
