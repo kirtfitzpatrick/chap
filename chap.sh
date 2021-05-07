@@ -50,7 +50,7 @@ Special purpose:
   print_header       "\$0 \$*"
   verify_line_count  LABEL COMPARISON_OP VALUE COMMAND
   confirm_cmd        COMMAND [MESSAGE]
-  confirm_reset      # Reset auto-confirm to force confirmation again
+  confirm_reset      # Reset auto-confirm
 HELP_MSG
 )
   printf "${HELP_TEXT}\n\n"
