@@ -58,7 +58,7 @@ Iterate by line:
 Special purpose:
   print_header       "$0 $*"
   verify_line_count  LABEL COMPARISON_OP VALUE COMMAND
-  confirm_cmd        COMMAND [MESSAGE]
+  confirm_cmd        COMMAND [ MESSAGE ]
   confirm_reset      # Reset auto-confirm
 ```
 

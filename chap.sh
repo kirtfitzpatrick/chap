@@ -23,19 +23,19 @@ Options:
   -V|--version   Print the current version and exit
 
 Logging:
-  ${LT_BLUE}info_msg${NC}         MESSAGE
-  ${GREEN}nominal_msg${NC}      MESSAGE
-  ${YELLOW}attention_msg${NC}    MESSAGE
-  ${RED}warning_msg${NC}      MESSAGE
-  ${PURPLE}modification_msg${NC} MESSAGE
+  ${LT_BLUE}info_msg${NC}           MESSAGE
+  ${GREEN}nominal_msg${NC}        MESSAGE
+  ${YELLOW}attention_msg${NC}      MESSAGE
+  ${RED}warning_msg${NC}        MESSAGE
+  ${PURPLE}modification_msg${NC}   MESSAGE
 
 Evaluate command:
-  ${LT_BLUE}info_cmd${NC}         COMMAND [ MESSAGE ]
-  ${GREEN}nominal_cmd${NC}      COMMAND [ MESSAGE ]
-  ${YELLOW}attention_cmd${NC}    COMMAND [ MESSAGE ]
-  ${RED}warning_cmd${NC}      COMMAND [ MESSAGE ]
-  ${PURPLE}modification_cmd${NC} COMMAND [ MESSAGE ]
-  ${DK_BLUE}echo_cmd${NC}         COMMAND
+  ${LT_BLUE}info_cmd${NC}           COMMAND [ MESSAGE ]
+  ${GREEN}nominal_cmd${NC}        COMMAND [ MESSAGE ]
+  ${YELLOW}attention_cmd${NC}      COMMAND [ MESSAGE ]
+  ${RED}warning_cmd${NC}        COMMAND [ MESSAGE ]
+  ${PURPLE}modification_cmd${NC}   COMMAND [ MESSAGE ]
+  ${DK_BLUE}echo_cmd${NC}           COMMAND
 
 Internal:
   display_link       FILE_LINK_OR_DIR_PATH
@@ -49,7 +49,7 @@ Iterate by line:
 Special purpose:
   print_header       "\$0 \$*"
   verify_line_count  LABEL COMPARISON_OP VALUE COMMAND
-  confirm_cmd        COMMAND [MESSAGE]
+  confirm_cmd        COMMAND [ MESSAGE ]
   confirm_reset      # Reset auto-confirm
 HELP_MSG
 )
