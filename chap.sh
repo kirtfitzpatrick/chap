@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=1.0.1
+VERSION=1.1.0
 
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -10,6 +10,8 @@ LT_BLUE='\033[0;36m' # Cyan
 GREY_BG='\033[47;30m'
 PURPLE='\033[0;35m'
 NC='\033[0m' # No Color
+
+CONFIRM_ALL=0
 
 
 usage () {
@@ -48,6 +50,7 @@ Special purpose:
   print_header       "\$0 \$*"
   verify_line_count  LABEL COMPARISON_OP VALUE COMMAND
   confirm_cmd        COMMAND [MESSAGE]
+  reset_confirm      # Reset auto-confirm to force confirmation again
 HELP_MSG
 )
   printf "${HELP_TEXT}\n\n"
@@ -111,7 +114,6 @@ function chap_brief_echo {
 
 function chap_brief_eval {
   CMD=$1
-  MAX_LINES=10
   OUTPUT=$(eval "${CMD}")
 
   chap_brief_echo "${OUTPUT}"
@@ -218,9 +220,6 @@ function chap_verify_line_count {
 
 # CMD=$1 First arg is command to confirm before executing
 # MSG=$2 If second argument passed, display as info message
-# 
-# Global variables that affect operation:
-# CONFIRM_ALL=0 to force confirmation for next command
 function chap_confirm_cmd {
   CMD=$1
 
@@ -246,6 +245,10 @@ function chap_confirm_cmd {
       printf "${LT_BLUE}Completed at:${NC} %s\n" `date "+%R:%S"`;
       ;;
   esac
+}
+
+function chap_reset_confirm {
+  CONFIRM_ALL=0
 }
 
 # chap print_header "$0 $*"
