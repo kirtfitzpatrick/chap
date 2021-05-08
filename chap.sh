@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=1.1.0
+VERSION=1.1.1
 
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -98,6 +98,7 @@ function chap_brief_echo {
   OUTPUT=$1
   ACTUAL_LINE_COUNT=$(echo "${OUTPUT}" | wc -l)
   LINE_COUNT=0
+  MAX_LINES=10
 
   if [[ "${OUTPUT}" != "" ]]; then
     echo "${OUTPUT}" | while read LINE ; do
