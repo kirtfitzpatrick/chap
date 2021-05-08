@@ -5,7 +5,7 @@
   "install": "install -b chap.sh ${PREFIX:-/usr/local}/bin/chap",
   "scripts": [ "chap.sh" ],
   "dependencies": {
-    "kirtfitzpatrick/stack": "master"
+    "kirtfitzpatrick/stack": "0.0.1"
   }
 }
 
