@@ -62,6 +62,15 @@ Special purpose:
   confirm_reset      # Reset auto-confirm
 ```
 
+# Fancy Line Loop Commands
+
+To initialize a stack for the fancy version of the line looping methods
+source chap in your script like so:
+
+```
+source `which chap`
+```
+
 # Demo
 
 The actual output is much more colorful. You'll have to trust me.

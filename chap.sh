@@ -11,9 +11,26 @@ GREY_BG='\033[47;30m'
 PURPLE='\033[0;35m'
 NC='\033[0m' # No Color
 
+
+# Loading a bpkg dependency should be far easier than this.
+# But this was what I came up with and it works.
+ORIGINAL_IFS="${IFS}"
 CHAP_DIR=$(dirname "${BASH_SOURCE[0]}")
-source "${CHAP_DIR}/deps/stack/stack.sh"
-stack new CHAP_IFS
+LOCAL_DEP="${CHAP_DIR}/deps/stack/stack.sh"
+GLOBAL_DEP="${CHAP_DIR}/stack"
+
+if [[ -a "${LOCAL_DEP}" ]]; then
+  source "${LOCAL_DEP}"
+  stack new CHAP_IFS
+  HAVE_STACK=0
+elif [[ -a "${GLOBAL_DEP}" ]]; then
+  source "${GLOBAL_DEP}"
+  stack new CHAP_IFS
+  HAVE_STACK=0
+else
+  echo "chap: Could not load stack dependency. Use caution with line looping." 1>&2
+  HAVE_STACK=1
+fi
 
 CONFIRM_ALL=0
 
@@ -46,8 +63,8 @@ Internal:
   brief_eval         COMMAND
 
 Iterate by line:
-  begin_line_looping
-  end_line_looping
+  begin_line_looping # See readme
+  end_line_looping   # See readme
 
 Special purpose:
   print_header       "\$0 \$*"
@@ -189,12 +206,19 @@ function chap_modification_cmd  {
 }
 
 function chap_begin_line_looping {
-  stack push CHAP_IFS "${IFS}"
+  if [[ ${HAVE_STACK} -eq 0 ]]; then
+    stack push CHAP_IFS "${IFS}"
+  fi
+
   IFS=$(echo -en "\n\b")
 }
 
 function chap_end_line_looping {
-  stack pop CHAP_IFS IFS
+  if [[ ${HAVE_STACK} -eq 0 ]]; then
+    stack pop CHAP_IFS IFS
+  else
+    IFS="${ORIGINAL_IFS}"
+  fi
 }
 
 # _verify_line_count "name of things" "-gt" 0 "ls /some/thing | grep somepattern"
