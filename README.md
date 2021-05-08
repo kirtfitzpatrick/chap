@@ -38,7 +38,7 @@ Logging:
   warning_msg        MESSAGE
   modification_msg   MESSAGE
 
-Evaluate command:
+Evaluation:
   info_cmd           COMMAND [ MESSAGE ]
   nominal_cmd        COMMAND [ MESSAGE ]
   attention_cmd      COMMAND [ MESSAGE ]
@@ -52,8 +52,8 @@ Internal:
   brief_eval         COMMAND
 
 Iterate by line:
-  begin_line_looping # PREV_IFS=$(chap begin_line_looping)
-  end_line_looping   # chap end_line_looping "${PREV_IFS}"
+  begin_line_looping
+  end_line_looping
 
 Special purpose:
   print_header       "$0 $*"

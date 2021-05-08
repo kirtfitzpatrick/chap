@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=1.1.1
+VERSION=1.2.0
 
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -11,8 +11,11 @@ GREY_BG='\033[47;30m'
 PURPLE='\033[0;35m'
 NC='\033[0m' # No Color
 
-CONFIRM_ALL=0
+CHAP_DIR=$(dirname "${BASH_SOURCE[0]}")
+source "${CHAP_DIR}/deps/stack/stack.sh"
+stack new CHAP_IFS
 
+CONFIRM_ALL=0
 
 usage () {
   HELP_TEXT=$(cat <<HELP_MSG
@@ -29,7 +32,7 @@ Logging:
   ${RED}warning_msg${NC}        MESSAGE
   ${PURPLE}modification_msg${NC}   MESSAGE
 
-Evaluate command:
+Evaluation:
   ${LT_BLUE}info_cmd${NC}           COMMAND [ MESSAGE ]
   ${GREEN}nominal_cmd${NC}        COMMAND [ MESSAGE ]
   ${YELLOW}attention_cmd${NC}      COMMAND [ MESSAGE ]
@@ -43,8 +46,8 @@ Internal:
   brief_eval         COMMAND
 
 Iterate by line:
-  begin_line_looping # PREV_IFS=\$(chap begin_line_looping)
-  end_line_looping   # chap end_line_looping "\${PREV_IFS}"
+  begin_line_looping
+  end_line_looping
 
 Special purpose:
   print_header       "\$0 \$*"
@@ -185,16 +188,13 @@ function chap_modification_cmd  {
   chap_brief_eval "${CMD}"
 }
 
-# PREV_IFS=$(chap begin_line_looping)
 function chap_begin_line_looping {
-  SAVEIFS=${IFS}
+  stack push CHAP_IFS "${IFS}"
   IFS=$(echo -en "\n\b")
-  echo "${SAVEIFS}"
 }
 
-# chap end_line_looping "${PREV_IFS}"
 function chap_end_line_looping {
-  IFS=${1}
+  stack pop CHAP_IFS IFS
 }
 
 # _verify_line_count "name of things" "-gt" 0 "ls /some/thing | grep somepattern"
