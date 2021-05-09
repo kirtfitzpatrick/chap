@@ -1,11 +1,8 @@
 {
   "name": "chap",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "description": "Utility methods for writing scripts for humans",
   "install": "install -b chap.sh ${PREFIX:-/usr/local}/bin/chap",
-  "scripts": [ "chap.sh" ],
-  "dependencies": {
-    "kirtfitzpatrick/stack": "master"
-  }
+  "scripts": [ "chap.sh" ]
 }
 

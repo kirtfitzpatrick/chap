@@ -1,38 +1,18 @@
 #!/usr/bin/env bash
 
-VERSION=1.2.0
+VERSION=2.0.0
 
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
 GREEN='\033[0;32m'
-DK_BLUE='\033[0;34m'
-LT_BLUE='\033[0;36m' # Cyan
+BLUE='\033[0;34m'
+CYAN='\033[0;36m'
 GREY_BG='\033[47;30m'
 PURPLE='\033[0;35m'
 NC='\033[0m' # No Color
 
-
-# Loading a bpkg dependency should be far easier than this.
-# But this was what I came up with and it works.
-ORIGINAL_IFS="${IFS}"
-CHAP_DIR=$(dirname "${BASH_SOURCE[0]}")
-LOCAL_DEP="${CHAP_DIR}/deps/stack/stack.sh"
-GLOBAL_DEP="${CHAP_DIR}/stack"
-
-if [[ -a "${LOCAL_DEP}" ]]; then
-  source "${LOCAL_DEP}"
-  stack new CHAP_IFS
-  HAVE_STACK=0
-elif [[ -a "${GLOBAL_DEP}" ]]; then
-  source "${GLOBAL_DEP}"
-  stack new CHAP_IFS
-  HAVE_STACK=0
-else
-  echo "chap: Could not load stack dependency. Use caution with line looping." 1>&2
-  HAVE_STACK=1
-fi
-
 CONFIRM_ALL=0
+
 
 usage () {
   HELP_TEXT=$(cat <<HELP_MSG
@@ -43,28 +23,24 @@ Options:
   -V|--version   Print the current version and exit
 
 Logging:
-  ${LT_BLUE}info_msg${NC}           MESSAGE
+  ${CYAN}info_msg${NC}           MESSAGE
   ${GREEN}nominal_msg${NC}        MESSAGE
   ${YELLOW}attention_msg${NC}      MESSAGE
   ${RED}warning_msg${NC}        MESSAGE
   ${PURPLE}modification_msg${NC}   MESSAGE
 
 Evaluation:
-  ${LT_BLUE}info_cmd${NC}           COMMAND [ MESSAGE ]
+  ${CYAN}info_cmd${NC}           COMMAND [ MESSAGE ]
   ${GREEN}nominal_cmd${NC}        COMMAND [ MESSAGE ]
   ${YELLOW}attention_cmd${NC}      COMMAND [ MESSAGE ]
   ${RED}warning_cmd${NC}        COMMAND [ MESSAGE ]
   ${PURPLE}modification_cmd${NC}   COMMAND [ MESSAGE ]
 
 Internal:
-  ${DK_BLUE}echo_cmd${NC}           COMMAND
+  ${BLUE}echo_cmd${NC}           COMMAND
   display_link       FILE_LINK_OR_DIR_PATH
   brief_echo         OUTPUT_BUFFER
   brief_eval         COMMAND
-
-Iterate by line:
-  begin_line_looping # See readme
-  end_line_looping   # See readme
 
 Special purpose:
   print_header       "\$0 \$*"
@@ -78,7 +54,7 @@ HELP_MSG
 
 # Helper Functions
 function chap_info_msg {
-  printf "${LT_BLUE}Info:${NC} $1 \n"
+  printf "${CYAN}Info:${NC} $1 \n"
 }
 
 function chap_nominal_msg {
@@ -98,7 +74,7 @@ function chap_modification_msg {
 }
 
 function chap_echo_cmd {
-  printf "${DK_BLUE}"
+  printf "${BLUE}"
   echo "${1}"
   printf "${NC}"
 }
@@ -108,7 +84,7 @@ function chap_display_link {
 
   if [[ -h "${LINK}" ]]; then
     TARGET=`readlink ${LINK}`
-    printf "${LINK} -> ${LT_BLUE}${TARGET}${NC}\n"
+    printf "${LINK} -> ${CYAN}${TARGET}${NC}\n"
   else
     echo "${LINK}"
   fi
@@ -147,7 +123,7 @@ function chap_info_cmd {
     chap_info_msg "${2}"
     chap_echo_cmd "${CMD}"
   else
-    chap_info_msg "${DK_BLUE}${CMD}${NC}"
+    chap_info_msg "${BLUE}${CMD}${NC}"
   fi
 
   chap_brief_eval "${CMD}"
@@ -160,7 +136,7 @@ function chap_nominal_cmd {
     chap_nominal_msg "${2}"
     chap_echo_cmd "${CMD}"
   else
-    chap_nominal_msg "${DK_BLUE}${CMD}${NC}"
+    chap_nominal_msg "${BLUE}${CMD}${NC}"
   fi
 
   chap_brief_eval "${CMD}"
@@ -173,7 +149,7 @@ function chap_attention_cmd {
     chap_attention_msg "${2}"
     chap_echo_cmd "${CMD}"
   else
-    chap_attention_msg "${DK_BLUE}${CMD}${NC}"
+    chap_attention_msg "${BLUE}${CMD}${NC}"
   fi
 
   chap_brief_eval "${CMD}"
@@ -186,7 +162,7 @@ function chap_warning_cmd  {
     chap_warning_msg "${2}"
     chap_echo_cmd "${CMD}"
   else
-    chap_warning_msg "${DK_BLUE}${CMD}${NC}"
+    chap_warning_msg "${BLUE}${CMD}${NC}"
   fi
 
   chap_brief_eval "${CMD}"
@@ -199,26 +175,10 @@ function chap_modification_cmd  {
     chap_modification_msg "${2}"
     chap_echo_cmd "${CMD}"
   else
-    chap_modification_msg "${DK_BLUE}${CMD}${NC}"
+    chap_modification_msg "${BLUE}${CMD}${NC}"
   fi
 
   chap_brief_eval "${CMD}"
-}
-
-function chap_begin_line_looping {
-  if [[ ${HAVE_STACK} -eq 0 ]]; then
-    stack push CHAP_IFS "${IFS}"
-  fi
-
-  IFS=$(echo -en "\n\b")
-}
-
-function chap_end_line_looping {
-  if [[ ${HAVE_STACK} -eq 0 ]]; then
-    stack pop CHAP_IFS IFS
-  else
-    IFS="${ORIGINAL_IFS}"
-  fi
 }
 
 # _verify_line_count "name of things" "-gt" 0 "ls /some/thing | grep somepattern"
@@ -265,9 +225,9 @@ function chap_confirm_cmd {
     [sS]* ) SKIP=1 ;;
     [aA]* ) CONFIRM_ALL=1 ;&
     * )
-      printf "${LT_BLUE}Initiated at:${NC} %s\n" `date "+%R:%S"`;
+      printf "${CYAN}Initiated at:${NC} %s\n" `date "+%R:%S"`;
       eval "${CMD}"
-      printf "${LT_BLUE}Completed at:${NC} %s\n" `date "+%R:%S"`;
+      printf "${CYAN}Completed at:${NC} %s\n" `date "+%R:%S"`;
       ;;
   esac
 }
@@ -281,9 +241,9 @@ function chap_print_header {
   COMMAND_LINE=$1
 
   printf "\n${GREY_BG}---------------------------------------------------------------------------------------------------------------------------------------------------------------${NC}\n"
-  printf "${LT_BLUE}Host:${NC}        `hostname`\n"
-  printf "${LT_BLUE}Command:${NC}     ${COMMAND_LINE}\n"
-  printf "${LT_BLUE}Working Dir:${NC} `pwd`\n"
+  printf "${CYAN}Host:${NC}        `hostname`\n"
+  printf "${CYAN}Command:${NC}     ${COMMAND_LINE}\n"
+  printf "${CYAN}Working Dir:${NC} `pwd`\n"
   echo ""
 }
 

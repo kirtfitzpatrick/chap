@@ -9,7 +9,6 @@ Utility methods for writing scripts for humans.
 - Evaluate commands with truncated output so you can get a brief idea of what 
   a command is doing without having to dump a wall of text.
 - Automatically checks for links and displays their target along side them
-- Readable functions to force iteration over lines
 - A basic header
 
 
@@ -51,24 +50,11 @@ Internal:
   brief_echo         OUTPUT_BUFFER
   brief_eval         COMMAND
 
-Iterate by line:
-  begin_line_looping
-  end_line_looping
-
 Special purpose:
   print_header       "$0 $*"
   verify_line_count  LABEL COMPARISON_OP VALUE COMMAND
   confirm_cmd        COMMAND [ MESSAGE ]
   confirm_reset      # Reset auto-confirm
-```
-
-# Fancy Line Loop Commands
-
-To initialize a stack for the fancy version of the line looping methods
-source chap in your script like so:
-
-```
-source `which chap`
 ```
 
 # Demo
