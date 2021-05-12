@@ -239,10 +239,14 @@ function chap_confirm_reset {
 # chap print_header "$0 $*"
 function chap_print_header {
   COMMAND_LINE=$1
+  TERM_WIDTH=$(tput cols)
+
   if which jot 2>&1 >/dev/null; then
-    HORIZONTAL_RULE=$(jot -b '-' -s '' `tput cols`)
+    HORIZONTAL_RULE=$(jot -b '-' -s '' ${TERM_WIDTH})
   else
-    HORIZONTAL_RULE="--------------------------------------------------------------------------------"
+    for (( i=0; i < ${TERM_WIDTH}; i++ )); do
+      HORIZONTAL_RULE="${HORIZONTAL_RULE}-"
+    done
   fi
 
   printf "\n${GREY_BG}%s${NC}\n" "${HORIZONTAL_RULE}"
