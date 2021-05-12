@@ -241,13 +241,9 @@ function chap_print_header {
   COMMAND_LINE=$1
   TERM_WIDTH=$(tput cols)
 
-  if which jot 2>&1 >/dev/null; then
-    HORIZONTAL_RULE=$(jot -b '-' -s '' ${TERM_WIDTH})
-  else
-    for (( i=0; i < ${TERM_WIDTH}; i++ )); do
-      HORIZONTAL_RULE="${HORIZONTAL_RULE}-"
-    done
-  fi
+  for (( i=0; i < ${TERM_WIDTH}; i++ )); do
+    HORIZONTAL_RULE="${HORIZONTAL_RULE}-"
+  done
 
   printf "\n${GREY_BG}%s${NC}\n" "${HORIZONTAL_RULE}"
   printf "${CYAN}Host:${NC}        `hostname`\n"
