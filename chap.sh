@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=2.0.0
+VERSION=2.0.1
 
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -239,8 +239,9 @@ function chap_confirm_reset {
 # chap print_header "$0 $*"
 function chap_print_header {
   COMMAND_LINE=$1
+  HORIZONTAL_RULE=$(jot -b '-' -s '' `tput cols`)
 
-  printf "\n${GREY_BG}---------------------------------------------------------------------------------------------------------------------------------------------------------------${NC}\n"
+  printf "\n${GREY_BG}%s${NC}\n" "${HORIZONTAL_RULE}"
   printf "${CYAN}Host:${NC}        `hostname`\n"
   printf "${CYAN}Command:${NC}     ${COMMAND_LINE}\n"
   printf "${CYAN}Working Dir:${NC} `pwd`\n"
