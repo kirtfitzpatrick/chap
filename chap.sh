@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=2.0.1
+VERSION=2.0.2
 
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -239,7 +239,11 @@ function chap_confirm_reset {
 # chap print_header "$0 $*"
 function chap_print_header {
   COMMAND_LINE=$1
-  HORIZONTAL_RULE=$(jot -b '-' -s '' `tput cols`)
+  if which jot 2>&1 >/dev/null; then
+    HORIZONTAL_RULE=$(jot -b '-' -s '' `tput cols`)
+  else
+    HORIZONTAL_RULE="--------------------------------------------------------------------------------"
+  fi
 
   printf "\n${GREY_BG}%s${NC}\n" "${HORIZONTAL_RULE}"
   printf "${CYAN}Host:${NC}        `hostname`\n"
