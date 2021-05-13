@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=2.0.2
+VERSION=2.0.3
 
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -97,6 +97,7 @@ function chap_brief_echo {
   MAX_LINES=10
 
   if [[ "${OUTPUT}" != "" ]]; then
+    SAVEIFS="${IFS}"; IFS='' # Needed to keep leading whitespace
     echo "${OUTPUT}" | while read LINE ; do
       LINE_COUNT=$((${LINE_COUNT} + 1))
       chap_display_link "${LINE}"
@@ -106,6 +107,7 @@ function chap_brief_echo {
         break
       fi
     done
+    IFS="${SAVEIFS}"
   fi
 }
 
