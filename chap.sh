@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=2.0.3
+VERSION=2.1.0
 
 RED='\033[0;31m'
 YELLOW='\033[0;33m'
@@ -27,14 +27,14 @@ Logging:
   ${GREEN}nominal_msg${NC}        MESSAGE
   ${YELLOW}attention_msg${NC}      MESSAGE
   ${RED}warning_msg${NC}        MESSAGE
-  ${PURPLE}modification_msg${NC}   MESSAGE
+  ${PURPLE}mod_msg${NC}            MESSAGE
 
 Evaluation:
   ${CYAN}info_cmd${NC}           COMMAND [ MESSAGE ]
   ${GREEN}nominal_cmd${NC}        COMMAND [ MESSAGE ]
   ${YELLOW}attention_cmd${NC}      COMMAND [ MESSAGE ]
   ${RED}warning_cmd${NC}        COMMAND [ MESSAGE ]
-  ${PURPLE}modification_cmd${NC}   COMMAND [ MESSAGE ]
+  ${PURPLE}mod_cmd${NC}            COMMAND [ MESSAGE ]
 
 Internal:
   ${BLUE}echo_cmd${NC}           COMMAND
@@ -70,6 +70,10 @@ function chap_warning_msg {
 }
 
 function chap_modification_msg {
+  chap_mod_msg "$1"
+}
+
+function chap_mod_msg {
   printf "${PURPLE}Modification:${NC} $1 \n"
 }
 
@@ -157,7 +161,7 @@ function chap_attention_cmd {
   chap_brief_eval "${CMD}"
 }
 
-function chap_warning_cmd  {
+function chap_warning_cmd {
   CMD=$1
 
   if [[ $# -eq 2 ]]; then
@@ -170,14 +174,22 @@ function chap_warning_cmd  {
   chap_brief_eval "${CMD}"
 }
 
-function chap_modification_cmd  {
+function chap_modification_cmd {
+  if [[ $# -eq 1 ]]; then
+    chap_mod_cmd "$1"
+  else
+    chap_mod_cmd "$1" "$2"
+  fi
+}
+
+function chap_mod_cmd {
   CMD=$1
 
   if [[ $# -eq 2 ]]; then
-    chap_modification_msg "${2}"
+    chap_mod_msg "${2}"
     chap_echo_cmd "${CMD}"
   else
-    chap_modification_msg "${BLUE}${CMD}${NC}"
+    chap_mod_msg "${BLUE}${CMD}${NC}"
   fi
 
   chap_brief_eval "${CMD}"
