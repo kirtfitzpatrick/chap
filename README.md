@@ -35,14 +35,14 @@ Logging:
   nominal_msg        MESSAGE
   attention_msg      MESSAGE
   warning_msg        MESSAGE
-  modification_msg   MESSAGE
+  mod_msg            MESSAGE
 
 Evaluation:
   info_cmd           COMMAND [ MESSAGE ]
   nominal_cmd        COMMAND [ MESSAGE ]
   attention_cmd      COMMAND [ MESSAGE ]
   warning_cmd        COMMAND [ MESSAGE ]
-  modification_cmd   COMMAND [ MESSAGE ]
+  mod_cmd            COMMAND [ MESSAGE ]
 
 Internal:
   echo_cmd           COMMAND
