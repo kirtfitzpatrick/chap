@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 
-VERSION=2.1.0
+VERSION=2.1.1
 
-RED='\033[0;31m'
-YELLOW='\033[0;33m'
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
 CYAN='\033[0;36m'
-GREY_BG='\033[47;30m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
 PURPLE='\033[0;35m'
+BLUE='\033[0;34m'
+GREY_BG='\033[47;30m'
 NC='\033[0m' # No Color
 
 CONFIRM_ALL=0
 
 
-usage () {
+function usage {
   HELP_TEXT=$(cat <<HELP_MSG
 Usage:
   chap [-hV]
@@ -69,6 +69,7 @@ function chap_warning_msg {
   printf "${RED}Warning:${NC} $1 \n"
 }
 
+# For backwards compatibility
 function chap_modification_msg {
   chap_mod_msg "$1"
 }
@@ -87,7 +88,7 @@ function chap_display_link {
   LINK=$1
 
   if [[ -h "${LINK}" ]]; then
-    TARGET=`readlink ${LINK}`
+    TARGET=$(readlink "${LINK}")
     printf "${LINK} -> ${CYAN}${TARGET}${NC}\n"
   else
     echo "${LINK}"
@@ -96,30 +97,29 @@ function chap_display_link {
 
 function chap_brief_echo {
   OUTPUT=$1
-  ACTUAL_LINE_COUNT=$(echo "${OUTPUT}" | wc -l)
-  LINE_COUNT=0
+  LINE_COUNT=$(echo "${OUTPUT}" | wc -l)
+  LINE_NUM=0
   MAX_LINES=10
 
   if [[ "${OUTPUT}" != "" ]]; then
-    SAVEIFS="${IFS}"; IFS='' # Needed to keep leading whitespace
+    SAVEIFS="${IFS}"; IFS="" # Needed to keep leading whitespace
+
     echo "${OUTPUT}" | while read LINE ; do
-      LINE_COUNT=$((${LINE_COUNT} + 1))
+      LINE_NUM=$((${LINE_NUM} + 1))
       chap_display_link "${LINE}"
 
-      if [[ ${LINE_COUNT} -eq ${MAX_LINES} && ${ACTUAL_LINE_COUNT} -gt ${MAX_LINES} ]]; then
-        printf " ... [ $((${ACTUAL_LINE_COUNT} - ${MAX_LINES})) more lines ]\n"
+      if [[ ${LINE_NUM} -eq ${MAX_LINES} && ${LINE_COUNT} -gt ${MAX_LINES} ]]; then
+        printf " ... [ $((${LINE_COUNT} - ${MAX_LINES})) more lines ]\n"
         break
       fi
     done
+
     IFS="${SAVEIFS}"
   fi
 }
 
 function chap_brief_eval {
-  CMD=$1
-  OUTPUT=$(eval "${CMD}")
-
-  chap_brief_echo "${OUTPUT}"
+  chap_brief_echo "$(eval "${1}")"
 }
 
 function chap_info_cmd {
@@ -174,6 +174,7 @@ function chap_warning_cmd {
   chap_brief_eval "${CMD}"
 }
 
+# For backwards compatibility
 function chap_modification_cmd {
   if [[ $# -eq 1 ]]; then
     chap_mod_cmd "$1"
@@ -254,12 +255,13 @@ function chap_confirm_reset {
 function chap_print_header {
   COMMAND_LINE=$1
   TERM_WIDTH=$(tput cols)
+  HORIZONTAL_RULE=""
 
   for (( i=0; i < ${TERM_WIDTH}; i++ )); do
     HORIZONTAL_RULE="${HORIZONTAL_RULE}-"
   done
 
-  printf "\n${GREY_BG}%s${NC}\n" "${HORIZONTAL_RULE}"
+  printf "\n${GREY_BG}${HORIZONTAL_RULE}${NC}\n"
   printf "${CYAN}Host:${NC}        `hostname`\n"
   printf "${CYAN}Command:${NC}     ${COMMAND_LINE}\n"
   printf "${CYAN}Working Dir:${NC} `pwd`\n"
