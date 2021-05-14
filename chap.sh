@@ -19,8 +19,8 @@ usage () {
 Usage:
   chap [-hV]
 Options:
-  -h|--help      Print this help dialogue and exit
-  -V|--version   Print the current version and exit
+  -h|--help          Print this help dialogue and exit
+  -V|--version       Print the current version and exit
 
 Logging:
   ${CYAN}info_msg${NC}           MESSAGE
