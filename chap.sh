@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=2.1.1
+VERSION=2.1.2
 
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
@@ -54,19 +54,19 @@ HELP_MSG
 
 # Helper Functions
 function chap_info_msg {
-  printf "${CYAN}Info:${NC} $1 \n"
+  printf "${CYAN}Info:${NC} %s \n" "$1"
 }
 
 function chap_nominal_msg {
-  printf "${GREEN}Nominal:${NC} $1 \n"
+  printf "${GREEN}Nominal:${NC} %s \n" "$1"
 }
 
 function chap_attention_msg {
-  printf "${YELLOW}Attention:${NC} $1 \n"
+  printf "${YELLOW}Attention:${NC} %s \n" "$1"
 }
 
 function chap_warning_msg {
-  printf "${RED}Warning:${NC} $1 \n"
+  printf "${RED}Warning:${NC} %s \n" "$1"
 }
 
 # For backwards compatibility
@@ -75,7 +75,7 @@ function chap_modification_msg {
 }
 
 function chap_mod_msg {
-  printf "${PURPLE}Modification:${NC} $1 \n"
+  printf "${PURPLE}Modification:${NC} %s \n " "$1"
 }
 
 function chap_echo_cmd {
@@ -89,7 +89,7 @@ function chap_display_link {
 
   if [[ -h "${LINK}" ]]; then
     TARGET=$(readlink "${LINK}")
-    printf "${LINK} -> ${CYAN}${TARGET}${NC}\n"
+    printf "%s -> ${CYAN}%s${NC}\n" "${LINK}" "${TARGET}"
   else
     echo "${LINK}"
   fi
@@ -104,7 +104,7 @@ function chap_brief_echo {
   if [[ "${OUTPUT}" != "" ]]; then
     SAVEIFS="${IFS}"; IFS="" # Needed to keep leading whitespace
 
-    echo "${OUTPUT}" | while read LINE ; do
+    echo "${OUTPUT}" | while read -r LINE ; do
       LINE_NUM=$((${LINE_NUM} + 1))
       chap_display_link "${LINE}"
 
@@ -206,7 +206,7 @@ function chap_verify_line_count {
   COMPARATOR=$2
   CORRECT=$3
   CMD=$4
-  ACTUAL=`eval ${CMD} | wc -l | awk '{print $1}'`
+  ACTUAL=$(eval "${CMD}" | wc -l | awk '{print $1}')
 
   if eval "[[ ${ACTUAL} ${COMPARATOR} ${CORRECT} ]]"; then
     chap_nominal_msg "${ACTUAL} ${LABEL} found."
@@ -240,9 +240,9 @@ function chap_confirm_cmd {
     [sS]* ) SKIP=1 ;;
     [aA]* ) CONFIRM_ALL=1 ;&
     * )
-      printf "${CYAN}Initiated at:${NC} %s\n" `date "+%R:%S"`;
+      printf "${CYAN}Initiated at:${NC} %s\n" "$(date "+%R:%S")";
       eval "${CMD}"
-      printf "${CYAN}Completed at:${NC} %s\n" `date "+%R:%S"`;
+      printf "${CYAN}Completed at:${NC} %s\n" "$(date "+%R:%S")";
       ;;
   esac
 }
@@ -262,9 +262,9 @@ function chap_print_header {
   done
 
   printf "\n${GREY_BG}${HORIZONTAL_RULE}${NC}\n"
-  printf "${CYAN}Host:${NC}        `hostname`\n"
-  printf "${CYAN}Command:${NC}     ${COMMAND_LINE}\n"
-  printf "${CYAN}Working Dir:${NC} `pwd`\n"
+  printf "${CYAN}Host:${NC}        %s\n" "$(hostname)"
+  printf "${CYAN}Command:${NC}     %s\n" "${COMMAND_LINE}"
+  printf "${CYAN}Working Dir:${NC} %s\n" "$(pwd)"
   echo ""
 }
 
