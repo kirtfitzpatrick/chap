@@ -54,19 +54,19 @@ HELP_MSG
 
 # Helper Functions
 function chap_info_msg {
-  printf "${CYAN}Info:${NC} %s \n" "$1"
+  printf "${CYAN}Info:${NC} $1 \n"
 }
 
 function chap_nominal_msg {
-  printf "${GREEN}Nominal:${NC} %s \n" "$1"
+  printf "${GREEN}Nominal:${NC} $1 \n"
 }
 
 function chap_attention_msg {
-  printf "${YELLOW}Attention:${NC} %s \n" "$1"
+  printf "${YELLOW}Attention:${NC} $1 \n"
 }
 
 function chap_warning_msg {
-  printf "${RED}Warning:${NC} %s \n" "$1"
+  printf "${RED}Warning:${NC} $1 \n"
 }
 
 # For backwards compatibility
