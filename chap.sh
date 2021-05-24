@@ -75,7 +75,7 @@ function chap_modification_msg {
 }
 
 function chap_mod_msg {
-  printf "${PURPLE}Modification:${NC} $1 \n "
+  printf "${PURPLE}Modification:${NC} $1 \n"
 }
 
 function chap_echo_cmd {
