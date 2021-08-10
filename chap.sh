@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=2.1.2
+VERSION=2.1.3
 
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
@@ -254,8 +254,14 @@ function chap_confirm_reset {
 # chap print_header "$0 $*"
 function chap_print_header {
   COMMAND_LINE=$1
-  TERM_WIDTH=$(tput cols)
   HORIZONTAL_RULE=""
+  TERMINAL=$(env | grep 'TERM')
+
+  if [[ "${TERMINAL}" == '' || "${TERMINAL}" == 'TERM=unknown' ]]; then
+    TERM_WIDTH='80'
+  else
+    TERM_WIDTH=$(tput cols)
+  fi
 
   for (( i=0; i < ${TERM_WIDTH}; i++ )); do
     HORIZONTAL_RULE="${HORIZONTAL_RULE}-"
