@@ -1,9 +1,9 @@
 # chap
 
-Utility methods for writing scripts for humans. 
+Utility scripting methods for humans. 
 
 - Display messages and commands to the user color coded to various levels of 
-  importance to the user.
+  importance.
 - Auto echo the command to be executed for quick manual debugging when needed.
 - Confirm command with skip, auto-confirm, and execution time features
 - Evaluate commands with truncated output so you can get a brief idea of what 
@@ -82,23 +82,11 @@ find deps -name '*.sh'
 deps/chap/chap.sh
 
 
-$ chap confirm_cmd "chap attention_cmd 'find .' 'This is all the things.'" "Confirm all the things."
-Info: Confirm all the things. 
-chap attention_cmd 'find .' 'This is all the things.'
+$ chap confirm_cmd "echo 'A command that requires caution.'" "Run this command that requires caution?"
+Info: Run this command that requires caution? 
+echo 'A command that requires caution.'
 Execute (a=all, s=skip): 
-Initiated at: 14:00:39
-Attention: This is all the things. 
-find .
-.
-./.DS_Store
-./demo.sh
-./one-more.empty
-./deps
-./deps/.DS_Store
-./deps/bin
-./deps/bin/chap -> ../chap/chap.sh
-./deps/chap
-./deps/chap/chap.sh
- ... [ 1 more lines ]
-Completed at: 14:00:39
+Initiated at: 08:41:38
+A command that requires caution.
+Completed at: 08:41:38
 ```
