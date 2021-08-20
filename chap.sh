@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=2.1.3
+VERSION=2.1.4
 
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
@@ -234,15 +234,23 @@ function chap_confirm_cmd {
     read CONFIRM
   else
     printf "${PURPLE}Execute (auto confirmed):${NC}\n";
+    CONFIRM=''
+  fi
+
+  if [[ "${CONFIRM}" == "a" ]]; then
+    CONFIRM_ALL=1
+    CONFIRM=''
   fi
 
   case ${CONFIRM} in
-    [sS]* ) SKIP=1 ;;
-    [aA]* ) CONFIRM_ALL=1 ;&
-    * )
+    s ) SKIP=1 ;;
+    "" )
       printf "${CYAN}Initiated at:${NC} %s\n" "$(date "+%R:%S")";
       eval "${CMD}"
       printf "${CYAN}Completed at:${NC} %s\n" "$(date "+%R:%S")";
+      ;;
+    * )
+      chap attention_msg "Invalid command."
       ;;
   esac
 }
