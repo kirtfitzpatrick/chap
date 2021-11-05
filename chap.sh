@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=2.1.4
+VERSION=2.2.0
 
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
@@ -47,6 +47,7 @@ Special purpose:
   verify_line_count  LABEL COMPARISON_OP VALUE COMMAND
   confirm_cmd        COMMAND [ MESSAGE ]
   confirm_reset      # Reset auto-confirm
+  prompt_var       MESSAGE VAR_TO_SET DEFAULT
 HELP_MSG
 )
   printf "${HELP_TEXT}\n\n"
@@ -257,6 +258,23 @@ function chap_confirm_cmd {
 
 function chap_confirm_reset {
   CONFIRM_ALL=0
+}
+
+function chap_prompt_var {
+  MSG="$1"
+  VAR_TO_SET="$2"
+  # DEFAULT=$3
+
+  if [[ $# -eq 3 ]]; then
+    DEFAULT=$3
+    read -e -p "${MSG}: " -i "${DEFAULT}" -r INPUT
+  else
+    read -e -p "${MSG}: " -r INPUT
+  fi
+
+  declare -g ${VAR_TO_SET}="${INPUT}"
+  printf "${CYAN}Info:${NC} " 
+  echo "${VAR_TO_SET}='${INPUT}'"
 }
 
 # chap print_header "$0 $*"

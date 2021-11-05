@@ -55,6 +55,7 @@ Special purpose:
   verify_line_count  LABEL COMPARISON_OP VALUE COMMAND
   confirm_cmd        COMMAND [ MESSAGE ]
   confirm_reset      # Reset auto-confirm
+  prompt_var         MESSAGE VAR_TO_SET DEFAULT
 ```
 
 # Demo
