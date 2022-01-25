@@ -23,71 +23,8 @@ bpkg install [-g] kirtfitzpatrick/chap
 ```
 
 # Usage
-```
-Usage:
-  chap [-hV]
-Options:
-  -h|--help      Print this help dialogue and exit
-  -V|--version   Print the current version and exit
-
-Logging:
-  info_msg           MESSAGE
-  nominal_msg        MESSAGE
-  attention_msg      MESSAGE
-  warning_msg        MESSAGE
-  mod_msg            MESSAGE
-
-Evaluation:
-  info_cmd           COMMAND [ MESSAGE ]
-  nominal_cmd        COMMAND [ MESSAGE ]
-  attention_cmd      COMMAND [ MESSAGE ]
-  warning_cmd        COMMAND [ MESSAGE ]
-  mod_cmd            COMMAND [ MESSAGE ]
-
-Internal:
-  echo_cmd           COMMAND
-  display_link       FILE_LINK_OR_DIR_PATH
-  brief_echo         OUTPUT_BUFFER
-  brief_eval         COMMAND
-
-Special purpose:
-  print_header       "$0 $*"
-  verify_line_count  LABEL COMPARISON_OP VALUE COMMAND
-  confirm_cmd        COMMAND [ MESSAGE ]
-  confirm_reset      # Reset auto-confirm
-  prompt_var         MESSAGE VAR_TO_SET DEFAULT
-```
+![Help message](./assets/help.png "chap -h")
 
 # Demo
 
-The actual output is much more colorful. You'll have to trust me.
-```
-$ chap info_msg "Hello, world."
-Info: Hello, world. 
-
-
-$ chap info_cmd 'find deps' "All the files installed with chap."
-Info: All the files installed with chap. 
-find deps
-deps
-deps/bin
-deps/bin/chap -> ../chap/chap.sh
-deps/chap
-deps/chap/chap.sh
-deps/chap/package.json
-
-
-$ chap verify_line_count "scripts" "-eq" 1 "find deps -name '*.sh'"
-Nominal: 1 scripts found. 
-find deps -name '*.sh'
-deps/chap/chap.sh
-
-
-$ chap confirm_cmd "echo 'A command that requires caution.'" "Run this command that requires caution?"
-Info: Run this command that requires caution? 
-echo 'A command that requires caution.'
-Execute (a=all, s=skip): 
-Initiated at: 08:41:38
-A command that requires caution.
-Completed at: 08:41:38
-```
+![Demo script](./assets/demo.png "./assets/demo.sh")

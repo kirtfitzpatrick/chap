@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=2.2.0
+VERSION=2.2.1
 
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
