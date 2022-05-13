@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=2.2.1
+VERSION=2.4.0
 
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
@@ -12,6 +12,7 @@ GREY_BG='\033[47;30m'
 NC='\033[0m' # No Color
 
 CONFIRM_ALL=0
+BRIEF_ENABLED=1
 
 
 function usage {
@@ -41,13 +42,15 @@ Internal:
   display_link       FILE_LINK_OR_DIR_PATH
   brief_echo         OUTPUT_BUFFER
   brief_eval         COMMAND
+  enable_brief_eval  # Truncate command outputs w/line count. Enabled by default
+  enable_raw_eval    # Display full, raw command outputs. (i.e. disable brief eval)
 
 Special purpose:
   print_header       "\$0 \$*"
   verify_line_count  LABEL COMPARISON_OP VALUE COMMAND
   confirm_cmd        COMMAND [ MESSAGE ]
   confirm_reset      # Reset auto-confirm
-  prompt_var       MESSAGE VAR_TO_SET DEFAULT
+  prompt_var         MESSAGE VAR_TO_SET DEFAULT
 HELP_MSG
 )
   printf "${HELP_TEXT}\n\n"
@@ -120,7 +123,19 @@ function chap_brief_echo {
 }
 
 function chap_brief_eval {
-  chap_brief_echo "$(eval "${1}")"
+  if [[ ${BRIEF_ENABLED} -eq 0 ]]; then
+    eval "${1}"
+  else
+    chap_brief_echo "$(eval "${1}")"
+  fi
+}
+
+function chap_enable_raw_eval() {
+  BRIEF_ENABLED=0
+}
+
+function chap_enable_brief_eval() {
+  BRIEF_ENABLED=1
 }
 
 function chap_info_cmd {
@@ -244,16 +259,23 @@ function chap_confirm_cmd {
   fi
 
   case ${CONFIRM} in
-    s ) SKIP=1 ;;
+    s ) 
+      SKIP=1
+      EXIT_STATUS=0
+      ;;
     "" )
       printf "${CYAN}Initiated at:${NC} %s\n" "$(date "+%R:%S")";
       eval "${CMD}"
+      EXIT_STATUS=$?
       printf "${CYAN}Completed at:${NC} %s\n" "$(date "+%R:%S")";
       ;;
     * )
       chap attention_msg "Invalid command."
+      EXIT_STATUS=1
       ;;
   esac
+
+  return ${EXIT_STATUS}
 }
 
 function chap_confirm_reset {
