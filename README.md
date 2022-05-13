@@ -1,6 +1,6 @@
 # chap
 
-Utility scripting methods for humans. 
+Colorful scripting methods and other helpful things.
 
 - Display messages and commands to the user color coded to various levels of 
   importance.

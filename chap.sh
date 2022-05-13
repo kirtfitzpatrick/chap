@@ -42,8 +42,8 @@ Internal:
   display_link       FILE_LINK_OR_DIR_PATH
   brief_echo         OUTPUT_BUFFER
   brief_eval         COMMAND
-  enable_brief_eval  # Truncate command outputs w/line count. Enabled by default
-  enable_raw_eval    # Display full, raw command outputs. (i.e. disable brief eval)
+  enable_brief_eval  # truncate output w/line count (default)
+  enable_raw_eval    # full, raw output
 
 Special purpose:
   print_header       "\$0 \$*"
