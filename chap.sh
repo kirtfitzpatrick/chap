@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=2.4.0
+VERSION=2.5.0
 
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
@@ -14,9 +14,9 @@ NC='\033[0m' # No Color
 CONFIRM_ALL=0
 BRIEF_ENABLED=1
 
-
 function usage {
-  HELP_TEXT=$(cat <<HELP_MSG
+  HELP_TEXT=$(
+    cat <<HELP_MSG
 Usage:
   chap [-hV]
 Options:
@@ -52,7 +52,7 @@ Special purpose:
   confirm_reset      # Reset auto-confirm
   prompt_var         MESSAGE VAR_TO_SET DEFAULT
 HELP_MSG
-)
+  )
   printf "${HELP_TEXT}\n\n"
 }
 
@@ -91,7 +91,7 @@ function chap_echo_cmd {
 function chap_display_link {
   LINK=$1
 
-  if [[ -h "${LINK}" ]]; then
+  if [[ -L "${LINK}" ]]; then
     TARGET=$(readlink "${LINK}")
     printf "%s -> ${CYAN}%s${NC}\n" "${LINK}" "${TARGET}"
   else
@@ -106,9 +106,10 @@ function chap_brief_echo {
   MAX_LINES=10
 
   if [[ "${OUTPUT}" != "" ]]; then
-    SAVEIFS="${IFS}"; IFS="" # Needed to keep leading whitespace
+    SAVEIFS="${IFS}"
+    IFS="" # Needed to keep leading whitespace
 
-    echo "${OUTPUT}" | while read -r LINE ; do
+    echo "${OUTPUT}" | while read -r LINE; do
       LINE_NUM=$((${LINE_NUM} + 1))
       chap_display_link "${LINE}"
 
@@ -125,9 +126,14 @@ function chap_brief_echo {
 function chap_brief_eval {
   if [[ ${BRIEF_ENABLED} -eq 0 ]]; then
     eval "${1}"
+    RETURN_VALUE=$?
   else
-    chap_brief_echo "$(eval "${1}")"
+    OUTPUT=$(eval "${1}")
+    RETURN_VALUE=$?
+    chap_brief_echo "${OUTPUT}"
   fi
+
+  return ${RETURN_VALUE}
 }
 
 function chap_enable_raw_eval() {
@@ -149,6 +155,8 @@ function chap_info_cmd {
   fi
 
   chap_brief_eval "${CMD}"
+
+  return $?
 }
 
 function chap_nominal_cmd {
@@ -162,6 +170,8 @@ function chap_nominal_cmd {
   fi
 
   chap_brief_eval "${CMD}"
+
+  return $?
 }
 
 function chap_attention_cmd {
@@ -175,6 +185,8 @@ function chap_attention_cmd {
   fi
 
   chap_brief_eval "${CMD}"
+
+  return $?
 }
 
 function chap_warning_cmd {
@@ -188,6 +200,8 @@ function chap_warning_cmd {
   fi
 
   chap_brief_eval "${CMD}"
+
+  return $?
 }
 
 # For backwards compatibility
@@ -210,6 +224,8 @@ function chap_mod_cmd {
   fi
 
   chap_brief_eval "${CMD}"
+
+  return $?
 }
 
 # _verify_line_count "name of things" "-gt" 0 "ls /some/thing | grep somepattern"
@@ -226,12 +242,16 @@ function chap_verify_line_count {
 
   if eval "[[ ${ACTUAL} ${COMPARATOR} ${CORRECT} ]]"; then
     chap_nominal_msg "${ACTUAL} ${LABEL} found."
+    RETURN_VALUE=0
   else
     chap_warning_msg "${ACTUAL} ${LABEL} found. Should be [[ ${COMPARATOR} ${CORRECT} ]]"
+    RETURN_VALUE=1
   fi
 
   chap_echo_cmd "${CMD}"
   chap_brief_eval "${CMD}"
+
+  return $RETURN_VALUE
 }
 
 # CMD=$1 First arg is command to confirm before executing
@@ -245,11 +265,11 @@ function chap_confirm_cmd {
 
   chap_echo_cmd "${CMD}"
 
-  if [[ ${CONFIRM_ALL} -eq 0 ]] ; then
-    printf "${PURPLE}Execute (a=all, s=skip):${NC} ";
+  if [[ ${CONFIRM_ALL} -eq 0 ]]; then
+    printf "${PURPLE}Execute (a=all, s=skip):${NC} "
     read CONFIRM
   else
-    printf "${PURPLE}Execute (auto confirmed):${NC}\n";
+    printf "${PURPLE}Execute (auto confirmed):${NC}\n"
     CONFIRM=''
   fi
 
@@ -259,20 +279,20 @@ function chap_confirm_cmd {
   fi
 
   case ${CONFIRM} in
-    s ) 
-      SKIP=1
-      EXIT_STATUS=0
-      ;;
-    "" )
-      printf "${CYAN}Initiated at:${NC} %s\n" "$(date "+%R:%S")";
-      eval "${CMD}"
-      EXIT_STATUS=$?
-      printf "${CYAN}Completed at:${NC} %s\n" "$(date "+%R:%S")";
-      ;;
-    * )
-      chap attention_msg "Invalid command."
-      EXIT_STATUS=1
-      ;;
+  s)
+    SKIP=1
+    EXIT_STATUS=0
+    ;;
+  "")
+    printf "${CYAN}Initiated at:${NC} %s\n" "$(date "+%R:%S")"
+    eval "${CMD}"
+    EXIT_STATUS=$?
+    printf "${CYAN}Completed at:${NC} %s\n" "$(date "+%R:%S")"
+    ;;
+  *)
+    chap attention_msg "Invalid command."
+    EXIT_STATUS=1
+    ;;
   esac
 
   return ${EXIT_STATUS}
@@ -295,7 +315,7 @@ function chap_prompt_var {
   fi
 
   declare -g ${VAR_TO_SET}="${INPUT}"
-  printf "${CYAN}Info:${NC} " 
+  printf "${CYAN}Info:${NC} "
   echo "${VAR_TO_SET}='${INPUT}'"
 }
 
@@ -311,7 +331,7 @@ function chap_print_header {
     TERM_WIDTH=$(tput cols)
   fi
 
-  for (( i=0; i < ${TERM_WIDTH}; i++ )); do
+  for ((i = 0; i < ${TERM_WIDTH}; i++)); do
     HORIZONTAL_RULE="${HORIZONTAL_RULE}-"
   done
 
@@ -322,36 +342,35 @@ function chap_print_header {
   echo ""
 }
 
-chap () {
+chap() {
   local opt="$1"
   local cmd=""
   shift
 
   case "${opt}" in
-    -h|--help)
-      usage
-      return 0
-      ;;
-    -V|--version)
-      echo "$VERSION"
-      return 0
-      ;;
-    *)
-      cmd="chap_${opt}"
-      if type "${cmd}" > /dev/null 2>&1; then
-        "${cmd}" "${@}"
-        return $?
-      else
-        if [ ! -z "${opt}" ]; then
-          error "Unknown argument: \`${opt}'"
-        fi
-        usage
-        return 1
+  -h | --help)
+    usage
+    return 0
+    ;;
+  -V | --version)
+    echo "$VERSION"
+    return 0
+    ;;
+  *)
+    cmd="chap_${opt}"
+    if type "${cmd}" >/dev/null 2>&1; then
+      "${cmd}" "${@}"
+      return $?
+    else
+      if [ ! -z "${opt}" ]; then
+        error "Unknown argument: \`${opt}'"
       fi
-      ;;
+      usage
+      return 1
+    fi
+    ;;
   esac
 }
-
 
 if [[ ${BASH_SOURCE[0]} != $0 ]]; then
   export -f chap
