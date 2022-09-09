@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=2.5.1
+VERSION=2.6.0
 
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
@@ -39,6 +39,7 @@ Evaluation:
 
 Internal:
   ${BLUE}echo_cmd${NC}           COMMAND
+  ${BLUE}echo_eval_cmd${NC}      COMMAND
   display_link       FILE_LINK_OR_DIR_PATH
   brief_echo         OUTPUT_BUFFER
   brief_eval         COMMAND
@@ -86,6 +87,11 @@ function chap_echo_cmd {
   printf "${BLUE}"
   echo "${1}"
   printf "${NC}"
+}
+
+function chap_echo_eval_cmd {
+  chap_echo_cmd "${1}"
+  chap_brief_eval "${1}"
 }
 
 function chap_display_link {
