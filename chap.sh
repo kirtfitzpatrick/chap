@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=2.5.0
+VERSION=2.6.0
 
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
@@ -89,7 +89,8 @@ function chap_echo_cmd {
 }
 
 function chap_display_link {
-  LINK=$1
+  local LINK=$1
+  local TARGET
 
   if [[ -L "${LINK}" ]]; then
     TARGET=$(readlink "${LINK}")
@@ -100,14 +101,13 @@ function chap_display_link {
 }
 
 function chap_brief_echo {
-  OUTPUT=$1
-  LINE_COUNT=$(echo "${OUTPUT}" | wc -l)
-  LINE_NUM=0
-  MAX_LINES=10
+  local OUTPUT=$1
+  local LINE_COUNT=$(echo "${OUTPUT}" | wc -l)
+  local LINE_NUM=0
+  local MAX_LINES=10
 
   if [[ "${OUTPUT}" != "" ]]; then
-    SAVEIFS="${IFS}"
-    IFS="" # Needed to keep leading whitespace
+    local IFS="" # Needed to keep leading whitespace
 
     echo "${OUTPUT}" | while read -r LINE; do
       LINE_NUM=$((${LINE_NUM} + 1))
@@ -118,12 +118,13 @@ function chap_brief_echo {
         break
       fi
     done
-
-    IFS="${SAVEIFS}"
   fi
 }
 
 function chap_brief_eval {
+  local OUTPUT
+  local RETURN_VALUE
+
   if [[ ${BRIEF_ENABLED} -eq 0 ]]; then
     eval "${1}"
     RETURN_VALUE=$?
@@ -145,7 +146,7 @@ function chap_enable_brief_eval() {
 }
 
 function chap_info_cmd {
-  CMD=$1
+  local CMD=$1
 
   if [[ $# -eq 2 ]]; then
     chap_info_msg "${2}"
@@ -160,7 +161,7 @@ function chap_info_cmd {
 }
 
 function chap_nominal_cmd {
-  CMD=$1
+  local CMD=$1
 
   if [[ $# -eq 2 ]]; then
     chap_nominal_msg "${2}"
@@ -175,7 +176,7 @@ function chap_nominal_cmd {
 }
 
 function chap_attention_cmd {
-  CMD=$1
+  local CMD=$1
 
   if [[ $# -eq 2 ]]; then
     chap_attention_msg "${2}"
@@ -190,7 +191,7 @@ function chap_attention_cmd {
 }
 
 function chap_warning_cmd {
-  CMD=$1
+  local CMD=$1
 
   if [[ $# -eq 2 ]]; then
     chap_warning_msg "${2}"
@@ -214,7 +215,7 @@ function chap_modification_cmd {
 }
 
 function chap_mod_cmd {
-  CMD=$1
+  local CMD=$1
 
   if [[ $# -eq 2 ]]; then
     chap_mod_msg "${2}"
@@ -234,11 +235,12 @@ function chap_mod_cmd {
 # arg 3: number to compare line count to
 # arg 4: command string to eval and count lines of
 function chap_verify_line_count {
-  LABEL=$1
-  COMPARATOR=$2
-  CORRECT=$3
-  CMD=$4
-  ACTUAL=$(eval "${CMD}" | wc -l | awk '{print $1}')
+  local LABEL=$1
+  local COMPARATOR=$2
+  local CORRECT=$3
+  local CMD=$4
+  local ACTUAL=$(eval "${CMD}" | wc -l | awk '{print $1}')
+  local RETURN_VALUE
 
   if eval "[[ ${ACTUAL} ${COMPARATOR} ${CORRECT} ]]"; then
     chap_nominal_msg "${ACTUAL} ${LABEL} found."
@@ -257,7 +259,9 @@ function chap_verify_line_count {
 # CMD=$1 First arg is command to confirm before executing
 # MSG=$2 If second argument passed, display as info message
 function chap_confirm_cmd {
-  CMD=$1
+  local CMD=$1
+  local CONFIRM
+  local RETURN_VALUE
 
   if [[ $# -eq 2 ]]; then
     chap_info_msg "${2}"
@@ -280,22 +284,21 @@ function chap_confirm_cmd {
 
   case ${CONFIRM} in
   s)
-    SKIP=1
-    EXIT_STATUS=0
+    RETURN_VALUE=0
     ;;
   "")
     printf "${CYAN}Initiated at:${NC} %s\n" "$(date "+%R:%S")"
     eval "${CMD}"
-    EXIT_STATUS=$?
+    RETURN_VALUE=$?
     printf "${CYAN}Completed at:${NC} %s\n" "$(date "+%R:%S")"
     ;;
   *)
     chap attention_msg "Invalid command."
-    EXIT_STATUS=1
+    RETURN_VALUE=1
     ;;
   esac
 
-  return ${EXIT_STATUS}
+  return ${RETURN_VALUE}
 }
 
 function chap_confirm_reset {
@@ -303,9 +306,9 @@ function chap_confirm_reset {
 }
 
 function chap_prompt_var {
-  MSG="$1"
-  VAR_TO_SET="$2"
-  # DEFAULT=$3
+  local MSG="$1"
+  local VAR_TO_SET="$2"
+  local DEFAULT
 
   if [[ $# -eq 3 ]]; then
     DEFAULT=$3
@@ -321,9 +324,10 @@ function chap_prompt_var {
 
 # chap print_header "$0 $*"
 function chap_print_header {
-  COMMAND_LINE=$1
-  HORIZONTAL_RULE=""
-  TERMINAL=$(env | grep 'TERM')
+  local COMMAND_LINE=$1
+  local HORIZONTAL_RULE=""
+  local TERMINAL=$(env | grep 'TERM')
+  local TERM_WIDTH
 
   if [[ "${TERMINAL}" == '' || "${TERMINAL}" == 'TERM=unknown' ]]; then
     TERM_WIDTH='80'
