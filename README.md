@@ -2,6 +2,8 @@
 
 Colorful scripting methods and other helpful things.
 
+Part of the bash package manager project [bpkg](https://github.com/bpkg/bpkg).
+
 - Display messages and commands to the user color coded to various levels of 
   importance.
 - Auto echo the command to be executed for quick manual debugging when needed.
@@ -17,7 +19,7 @@ Colorful scripting methods and other helpful things.
 
 # Install
 
-Available as a [bpkg](http://www.bpkg.sh/)
+Available as a [bpkg](https://github.com/bpkg/bpkg)
 ```sh
 bpkg install [-g] kirtfitzpatrick/chap
 ```
