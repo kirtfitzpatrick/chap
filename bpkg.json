@@ -1,0 +1,9 @@
+{
+  "name": "chap",
+  "version": "2.6.1",
+  "description": "Colorful scripting methods and other helpful tools",
+  "install": "install -b chap.sh ${PREFIX:-/usr/local}/bin/chap",
+  "scripts": [
+    "chap.sh"
+  ]
+}
