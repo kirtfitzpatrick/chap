@@ -1,6 +1,6 @@
 {
   "name": "chap",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Colorful scripting methods and other helpful tools",
   "install": "install -b chap.sh ${PREFIX:-/usr/local}/bin/chap",
   "scripts": [

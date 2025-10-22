@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=3.0.0
+VERSION=3.0.1
 
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
@@ -399,15 +399,15 @@ function chap_halt_on_error_silent {
 }
 
 function chap_kebab_case {
-  ${SCRIPT_DIR}/lodash.js kebabCase $@
+  ${SCRIPT_DIR}/../chap/lodash.js kebabCase $@
 }
 
 function chap_pascal_case {
-  ${SCRIPT_DIR}/lodash.js pascalCase $@
+  ${SCRIPT_DIR}/../chap/lodash.js pascalCase $@
 }
 
 function chap_snake_case {
-  ${SCRIPT_DIR}/lodash.js snakeCase $@
+  ${SCRIPT_DIR}/../chap/lodash.js snakeCase $@
 }
 
 function chap_lowercase {
