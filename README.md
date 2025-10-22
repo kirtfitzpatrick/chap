@@ -16,6 +16,7 @@ Part of the bash package manager project [bpkg](https://github.com/bpkg/bpkg).
 
 # Requirements
 - bash 4 or greater
+- string case functions require Node.js since they use lodash under the hood
 
 # Install
 
