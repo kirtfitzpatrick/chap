@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION=2.6.1
+VERSION=3.0.0
 
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
@@ -11,6 +11,7 @@ BLUE='\033[0;34m'
 GREY_BG='\033[47;30m'
 NC='\033[0m' # No Color
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIRM_ALL=0
 BRIEF_ENABLED=1
 
@@ -43,15 +44,34 @@ Internal:
   display_link       FILE_LINK_OR_DIR_PATH
   brief_echo         OUTPUT_BUFFER
   brief_eval         COMMAND
-  enable_brief_eval  # truncate output w/line count (default)
-  enable_raw_eval    # full, raw output
+* enable_brief_eval  # truncate output w/line count (default)
+* enable_raw_eval    # full, raw output
+
+Execution control:
+  read_to_var          VAR_NAME COMMAND # Requires variable to be declared beforehand
+  halt_read_to_var     VAR_NAME COMMAND # Same as above but exits on error
+  halt_on_error        COMMAND # Exits on any error in a pipe
+  halt_on_error_silent COMMAND # Same as above but no output unless error
+
+String utilities:
+  kebab_case           STRING
+  pascal_case          STRING
+  snake_case           STRING
+  lowercase            STRING
 
 Special purpose:
   print_header       "\$0 \$*"
   verify_line_count  LABEL COMPARISON_OP VALUE COMMAND
   confirm_cmd        COMMAND [ MESSAGE ]
-  confirm_reset      # Reset auto-confirm
-  prompt_var         MESSAGE VAR_TO_SET DEFAULT
+* confirm_reset      # Reset auto-confirm
+* prompt_var         MESSAGE VAR_TO_SET DEFAULT
+
+* Commands that remember state or set variables for you will require you to 
+  source chap from your script so the commands can run as function calls in 
+  the same shell.
+  E.g.
+    source \$(which chap)
+
 HELP_MSG
   )
   printf "${HELP_TEXT}\n\n"
@@ -326,6 +346,73 @@ function chap_prompt_var {
   declare -g ${VAR_TO_SET}="${INPUT}"
   printf "${CYAN}Info:${NC} "
   echo "${VAR_TO_SET}='${INPUT}'"
+}
+
+function chap_read_to_var {
+  local VAR_NAME=$1
+  local CMD=$2
+
+  chap_echo_cmd "${CMD}"
+  _READ_TO_VAR_OUT=$(chap_halt_on_error_silent "${CMD}")
+  local EXIT_CODE=$?
+
+  # requires the variable to be declared beforehand. I like this one better.
+  eval "${VAR_NAME}='${_READ_TO_VAR_OUT}'" 
+
+  return ${EXIT_CODE}
+}
+
+function chap_halt_read_to_var {
+  chap_read_to_var $1 "$2"
+  local EXIT_CODE=$?
+
+  if [ ${EXIT_CODE} -ne 0 ]; then
+    exit ${EXIT_CODE}
+  fi
+
+  return ${EXIT_CODE}
+}
+
+function chap_halt_on_error {
+  local CMD="$@"
+
+  chap_echo_cmd "${CMD}"
+  chap_halt_on_error_silent "${CMD}"
+
+  return $?
+}
+
+function chap_halt_on_error_silent {
+  local CMD="$@"
+
+  set -o pipefail
+  eval "${CMD}"
+  local EXIT_CODE=$?
+  set +o pipefail
+
+  if [ ${EXIT_CODE} -ne 0 ]; then
+    echo "ERROR: ${CMD} failed with exit code: ${EXIT_CODE}" >/dev/stderr
+    exit ${EXIT_CODE}
+  fi
+
+  return ${EXIT_CODE}
+}
+
+function chap_kebab_case {
+  ${SCRIPT_DIR}/lodash.js kebabCase $@
+}
+
+function chap_pascal_case {
+  ${SCRIPT_DIR}/lodash.js pascalCase $@
+}
+
+function chap_snake_case {
+  ${SCRIPT_DIR}/lodash.js snakeCase $@
+}
+
+function chap_lowercase {
+  STR="$@"
+  echo "${STR@L}"
 }
 
 # chap print_header "$0 $*"

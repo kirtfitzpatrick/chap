@@ -1,9 +1,11 @@
 {
   "name": "chap",
-  "version": "2.6.1",
+  "version": "3.0.0",
   "description": "Colorful scripting methods and other helpful tools",
   "install": "install -b chap.sh ${PREFIX:-/usr/local}/bin/chap",
   "scripts": [
-    "chap.sh"
+    "chap.sh",
+    "lodash.js",
+    "lodash-lib.js"
   ]
 }
